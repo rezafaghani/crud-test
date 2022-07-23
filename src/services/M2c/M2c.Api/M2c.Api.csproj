@@ -5,22 +5,24 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentValidation" Version="11.1.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Application\Behaviors" />
       <Folder Include="Application\Commands" />
       <Folder Include="Application\Models" />
       <Folder Include="Application\Queries" />
       <Folder Include="Application\Validations" />
       <Folder Include="Infrastructure\AutofacModules" />
+      <Folder Include="Infrastructure\Extentions" />
       <Folder Include="Infrastructure\Factories" />
       <Folder Include="Infrastructure\Migrations" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\M2c.Domain\M2c.Domain.csproj" />
+      <ProjectReference Include="..\M2c.Infrastructure\M2c.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
