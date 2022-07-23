@@ -5,18 +5,53 @@ using MediatR;
 namespace M2c.Domain.SeedWork
 {
 
-    public abstract class Entity
+   public abstract class Entity
     {
-        int? _requestedHashCode;
-        int _Id;
+        private List<INotification> _domainEvents;
+        private int? _requestedHashCode;
 
-        public virtual int Id
+        public virtual long Id { get; protected set; }
+        public bool Deleted { get; set; }
+        public DateTime CreateDateTime { get;  set; }
+        public DateTime? UpdateDateTime { get;  set; }
+        public DateTime? DeleteDateTime { get;  set; }
+        public long CreatedBy { get; protected set; }
+
+        public void SetCreateDateTime()
         {
-            get { return _Id; }
-            protected set { _Id = value; }
+            CreateDateTime = DateTime.Now;
         }
 
-        private List<INotification> _domainEvents;
+        public void SetCreatedBy(long createdBy)
+        {
+            CreatedBy = createdBy;
+        }
+
+        public void SetId(long id)
+        {
+            Id = id;
+        }
+
+        public void SetUpdateDateTime()
+        {
+            UpdateDateTime = DateTime.Now;
+        }
+
+        public void SetDeleteDateTime()
+        {
+            DeleteDateTime = DateTime.Now;
+        }
+
+        public void SetDeleted()
+        {
+            Deleted = true;
+        }
+
+        public void UndoDeleted()
+        {
+            Deleted = false;
+        }
+
         public IReadOnlyCollection<INotification> DomainEvents => _domainEvents?.AsReadOnly();
 
         public void AddDomainEvent(INotification eventItem)
@@ -37,7 +72,7 @@ namespace M2c.Domain.SeedWork
 
         public bool IsTransient()
         {
-            return this.Id == default(Int32);
+            return Id == default;
         }
 
         public override bool Equals(object obj)
@@ -45,18 +80,17 @@ namespace M2c.Domain.SeedWork
             if (obj == null || !(obj is Entity))
                 return false;
 
-            if (Object.ReferenceEquals(this, obj))
+            if (ReferenceEquals(this, obj))
                 return true;
 
-            if (this.GetType() != obj.GetType())
+            if (GetType() != obj.GetType())
                 return false;
 
-            Entity item = (Entity)obj;
+            var item = (Entity) obj;
 
-            if (item.IsTransient() || this.IsTransient())
+            if (item.IsTransient() || IsTransient())
                 return false;
-            else
-                return item.Id == this.Id;
+            return item.Id == Id;
         }
 
         public override int GetHashCode()
@@ -65,22 +99,20 @@ namespace M2c.Domain.SeedWork
             {
                 if (!_requestedHashCode.HasValue)
                     _requestedHashCode =
-                        this.Id.GetHashCode() ^
+                        Id.GetHashCode() ^
                         31; // XOR for random distribution (http://blogs.msdn.com/b/ericlippert/archive/2011/02/28/guidelines-and-rules-for-gethashcode.aspx)
 
                 return _requestedHashCode.Value;
             }
-            else
-                return base.GetHashCode();
 
+            return base.GetHashCode();
         }
 
         public static bool operator ==(Entity left, Entity right)
         {
-            if (Object.Equals(left, null))
-                return (Object.Equals(right, null)) ? true : false;
-            else
-                return left.Equals(right);
+            if (Equals(left, null))
+                return Equals(right, null) ? true : false;
+            return left.Equals(right);
         }
 
         public static bool operator !=(Entity left, Entity right)
