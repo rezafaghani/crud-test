@@ -16,7 +16,6 @@
       <Folder Include="Application\Validations" />
       <Folder Include="Infrastructure\AutofacModules" />
       <Folder Include="Infrastructure\Extentions" />
-      <Folder Include="Infrastructure\Factories" />
       <Folder Include="Infrastructure\Migrations" />
     </ItemGroup>
 
