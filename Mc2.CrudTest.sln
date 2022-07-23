@@ -3,13 +3,27 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mc2.CrudTest.Presentation.Front", "Mc2.CrudTest.Presentation\Front\Mc2.CrudTest.Presentation.Front.csproj", "{4B62EAE3-1858-4833-9E36-EE77FADC2328}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mc2.CrudTest.Presentation.Front", "Old-Structure\Mc2.CrudTest.Presentation\Front\Mc2.CrudTest.Presentation.Front.csproj", "{4B62EAE3-1858-4833-9E36-EE77FADC2328}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mc2.CrudTest.AcceptanceTests", "Mc2.CrudTest.AcceptanceTests\Mc2.CrudTest.AcceptanceTests.csproj", "{00E0E714-1EB4-4B62-950F-AE7C3BFD6766}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mc2.CrudTest.AcceptanceTests", "Old-Structure\Mc2.CrudTest.AcceptanceTests\Mc2.CrudTest.AcceptanceTests.csproj", "{00E0E714-1EB4-4B62-950F-AE7C3BFD6766}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mc2.CrudTest.Shared", "Mc2.CrudTest.Presentation\Shared\Mc2.CrudTest.Shared.csproj", "{661369DC-0F78-4889-BA3B-639513A49789}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mc2.CrudTest.Shared", "Old-Structure\Mc2.CrudTest.Presentation\Shared\Mc2.CrudTest.Shared.csproj", "{661369DC-0F78-4889-BA3B-639513A49789}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mc2.CrudTest.Presentation.Server", "Mc2.CrudTest.Presentation\Server\Mc2.CrudTest.Presentation.Server.csproj", "{8D41010B-AEF1-4742-B7EC-6A5AE62C45FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mc2.CrudTest.Presentation.Server", "Old-Structure\Mc2.CrudTest.Presentation\Server\Mc2.CrudTest.Presentation.Server.csproj", "{8D41010B-AEF1-4742-B7EC-6A5AE62C45FC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Old-Structure", "Old-Structure", "{6E37B99C-4A14-4B2A-B4C1-2E88379F0776}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{32D64029-5ED5-4D11-A84E-1B67AC7657ED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{D78C747A-4810-4C75-AB90-AAE046322FA4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "M2c", "M2c", "{53C950E6-774D-4B1E-9F12-B1C6FAFCBBD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M2c.Domain", "src\services\M2c\M2c.Domain\M2c.Domain.csproj", "{B6FCF76D-C148-4DD2-8FB5-B39BD9EB3100}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M2c.Infrastructure", "src\services\M2c\M2c.Infrastructure\M2c.Infrastructure.csproj", "{371D5D65-5B6F-4203-B1A0-FBC8E3DC6963}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M2c.Api", "src\services\M2c\M2c.Api\M2c.Api.csproj", "{BE3A4DD7-25C5-4891-961B-0F5B432F7FFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,11 +47,34 @@ Global
 		{8D41010B-AEF1-4742-B7EC-6A5AE62C45FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D41010B-AEF1-4742-B7EC-6A5AE62C45FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D41010B-AEF1-4742-B7EC-6A5AE62C45FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6FCF76D-C148-4DD2-8FB5-B39BD9EB3100}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6FCF76D-C148-4DD2-8FB5-B39BD9EB3100}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6FCF76D-C148-4DD2-8FB5-B39BD9EB3100}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6FCF76D-C148-4DD2-8FB5-B39BD9EB3100}.Release|Any CPU.Build.0 = Release|Any CPU
+		{371D5D65-5B6F-4203-B1A0-FBC8E3DC6963}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{371D5D65-5B6F-4203-B1A0-FBC8E3DC6963}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{371D5D65-5B6F-4203-B1A0-FBC8E3DC6963}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{371D5D65-5B6F-4203-B1A0-FBC8E3DC6963}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE3A4DD7-25C5-4891-961B-0F5B432F7FFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE3A4DD7-25C5-4891-961B-0F5B432F7FFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE3A4DD7-25C5-4891-961B-0F5B432F7FFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE3A4DD7-25C5-4891-961B-0F5B432F7FFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4B5A26C9-68C1-49D9-9F32-AF907A1730C2}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{661369DC-0F78-4889-BA3B-639513A49789} = {6E37B99C-4A14-4B2A-B4C1-2E88379F0776}
+		{8D41010B-AEF1-4742-B7EC-6A5AE62C45FC} = {6E37B99C-4A14-4B2A-B4C1-2E88379F0776}
+		{4B62EAE3-1858-4833-9E36-EE77FADC2328} = {6E37B99C-4A14-4B2A-B4C1-2E88379F0776}
+		{00E0E714-1EB4-4B62-950F-AE7C3BFD6766} = {6E37B99C-4A14-4B2A-B4C1-2E88379F0776}
+		{D78C747A-4810-4C75-AB90-AAE046322FA4} = {32D64029-5ED5-4D11-A84E-1B67AC7657ED}
+		{53C950E6-774D-4B1E-9F12-B1C6FAFCBBD9} = {D78C747A-4810-4C75-AB90-AAE046322FA4}
+		{B6FCF76D-C148-4DD2-8FB5-B39BD9EB3100} = {53C950E6-774D-4B1E-9F12-B1C6FAFCBBD9}
+		{371D5D65-5B6F-4203-B1A0-FBC8E3DC6963} = {53C950E6-774D-4B1E-9F12-B1C6FAFCBBD9}
+		{BE3A4DD7-25C5-4891-961B-0F5B432F7FFD} = {53C950E6-774D-4B1E-9F12-B1C6FAFCBBD9}
 	EndGlobalSection
 EndGlobal
