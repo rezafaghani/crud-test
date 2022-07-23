@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 
 namespace M2c.Domain.SeedWork
 {
@@ -14,7 +13,6 @@ namespace M2c.Domain.SeedWork
         void Update(T entity);
         T Delete(T entity);
 
-        Task<T> GetAsync(long entityId);
     }
 
 }

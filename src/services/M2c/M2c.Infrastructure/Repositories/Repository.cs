@@ -1,15 +1,13 @@
 ﻿#nullable enable
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using M2c.Domain.SeedWork;
 using Microsoft.EntityFrameworkCore;
 
 namespace M2c.Infrastructure.Repositories
 {
-
     public class Repository<T> : IRepository<T>
-    where T : Entity
+        where T : Entity
     {
         private readonly M2CDbContext _context;
 
@@ -27,15 +25,9 @@ namespace M2c.Infrastructure.Repositories
 
         public T Add(T entity)
         {
-            if (entity.IsTransient())
-            {
-
-                return _context.Set<T>()
-                    .Add(entity)
-                    .Entity;
-            }
-
-            return entity;
+            return _context.Set<T>()
+                .Add(entity)
+                .Entity;
         }
 
 
@@ -55,19 +47,9 @@ namespace M2c.Infrastructure.Repositories
         }
 
 
-        public async Task<T> GetAsync(long entityId)
-        {
-            var entity = await _context
-                .Set<T>().AsNoTracking()
-                .FirstOrDefaultAsync(o => o.Id == entityId && o.Deleted == false);
-            return entity;
-        }
-
-
         public void Remove(T entity)
         {
             _context.Set<T>().Remove(entity);
-
         }
     }
 }

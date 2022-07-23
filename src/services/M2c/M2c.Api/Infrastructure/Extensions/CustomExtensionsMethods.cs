@@ -57,7 +57,7 @@ namespace M2c.Api.Infrastructure.Extensions
         {
             services.AddDbContext<M2CDbContext>(options =>
                 {
-                    options.UseSqlServer(configuration.GetConnectionString("ConnectionString"), builder =>
+                    options.UseSqlServer(configuration.GetConnectionString("CustomerDb"), builder =>
                     {
                         builder.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
                         builder.EnableRetryOnFailure(15, TimeSpan.FromSeconds(30), null);

@@ -129,7 +129,7 @@ namespace M2c.Infrastructure
                 .AddEnvironmentVariables()
                 .Build();
             var optionsBuilder = new DbContextOptionsBuilder<M2CDbContext>()
-                .UseSqlServer(config["ConnectionString"]);
+                .UseSqlServer(config.GetConnectionString("CustomerDb"));
 
             return new M2CDbContext(optionsBuilder.Options, new NoMediator());
         }

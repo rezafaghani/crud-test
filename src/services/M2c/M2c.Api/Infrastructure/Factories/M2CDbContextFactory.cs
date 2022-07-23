@@ -18,7 +18,7 @@ namespace M2c.Api.Infrastructure.Factories
 
             var optionsBuilder = new DbContextOptionsBuilder<M2CDbContext>();
 
-            optionsBuilder.UseSqlServer(config.GetConnectionString("ConnectionString"), o => o.MigrationsAssembly("M2c.Api"));
+            optionsBuilder.UseSqlServer(config.GetConnectionString("CustomerDb"), o => o.MigrationsAssembly("M2c.Api"));
 
             return new M2CDbContext(optionsBuilder.Options);
         }

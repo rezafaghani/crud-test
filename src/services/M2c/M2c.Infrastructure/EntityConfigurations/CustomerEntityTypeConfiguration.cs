@@ -9,7 +9,6 @@ namespace M2c.Infrastructure.EntityConfigurations
         public void Configure(EntityTypeBuilder<Customer> builder)
         {
             builder.ToTable("Customers", M2CDbContext.DefaultSchema);
-
             builder.HasKey(b => new { b.Firstname, b.Lastname, b.DateOfBirth });
             builder.Property(b => b.Firstname).IsRequired();
             builder.Property(b => b.Lastname).IsRequired();
