@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using M2c.Api.Application.Commands.CustomerCommands.Create;
+using M2c.Api.Application.Commands.CustomerCommands.Update;
 using M2c.Infrastructure.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +27,24 @@ namespace M2c.Api.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.BadRequest)]
-        public async Task<ActionResult<bool>> CreateOrderDraftFromBasketDataAsync([FromBody] CreateCustomerCommand request)
+        public async Task<ActionResult<bool>> CreateCustomer([FromBody] CreateCustomerCommand request)
+        {
+            _logger.LogInformation(
+                "----- Sending command: {CommandName} - :{FirstName} - {LastName} - {DateOfBirth} ({@Command})",
+                request.GetGenericTypeName(),
+                request.FirstName,
+                request.LastName,
+                request.DateOfBirth,
+                request);
+
+            return await _mediator.Send(request).ConfigureAwait(false);
+        }
+
+        [Route("update")]
+        [HttpPut]
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.BadRequest)]
+        public async Task<ActionResult<bool>> UpdateCustomer([FromBody] UpdateCustomerCommand request)
         {
             _logger.LogInformation(
                 "----- Sending command: {CommandName} - :{FirstName} - {LastName} - {DateOfBirth} ({@Command})",

@@ -1,6 +1,5 @@
-﻿using System.Reflection;
-using Autofac;
-using M2c.Domain.SeedWork;
+﻿using Autofac;
+using M2c.Domain.AggregatesModel;
 using M2c.Infrastructure.Repositories;
 
 namespace M2c.Api.Infrastructure.AutofacModules
@@ -17,9 +16,8 @@ namespace M2c.Api.Infrastructure.AutofacModules
         protected override void Load(ContainerBuilder builder)
         {
 
-            builder
-                .RegisterGeneric(typeof(Repository<>))
-                .As(typeof(IRepository<>))
+            builder.RegisterType<CustomerRepository>()
+                .As<ICustomerRepository>()
                 .InstancePerLifetimeScope();
 
         }

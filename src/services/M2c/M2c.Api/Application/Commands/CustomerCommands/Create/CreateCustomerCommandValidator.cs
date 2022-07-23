@@ -2,25 +2,29 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 using FluentValidation;
-using FluentValidation.Validators;
+using PhoneNumbers;
 
 namespace M2c.Api.Application.Commands.CustomerCommands.Create
 {
-    public class CreateCustomerCommandValidator :AbstractValidator<CreateCustomerCommand>
+    public class CreateCustomerCommandValidator : AbstractValidator<CreateCustomerCommand>
     {
         public CreateCustomerCommandValidator()
         {
-            RuleFor(r => r.Firstname).NotEmpty().WithMessage("First name is mandatory");
-            RuleFor(r => r.Lastname).NotEmpty().WithMessage("Last name is mandatory");
+            RuleFor(r => r.FirstName).NotEmpty().WithMessage("First name is mandatory");
+            RuleFor(r => r.LastName).NotEmpty().WithMessage("Last name is mandatory");
             RuleFor(r => r.DateOfBirth).NotEmpty().WithMessage("Date of birth is mandatory");
             RuleFor(r => r.Email).Must(BeValidEmail).WithMessage("Valid email is required ");
-            RuleFor(r => r.PhoneNumber).NotEmpty().WithMessage("Phone number is mandatory").MaximumLength(15).WithMessage("Phone number shouldn't be much more than 15 character");
-            
-            RuleFor(x => x.BankAccountNumber).Must(BeValidBankAccount).WithMessage("Please specify a valid bank account");
+            RuleFor(r => r.PhoneNumber).NotEmpty().WithMessage("Phone number is mandatory")
+                .Must(IsValidNumber).WithMessage("Phone number is not valid")
+                .MaximumLength(15).WithMessage("Phone number can not more than 15 character");
+
+            RuleFor(x => x.BankAccountNumber).Must(BeValidBankAccount)
+                .WithMessage("Please specify a valid bank account");
         }
+
         private bool BeValidBankAccount(string account)
         {
-            return (Regex.IsMatch(account, @"^\d+$")) ;
+            return (Regex.IsMatch(account, @"^\d+$"));
         }
 
         private bool BeValidEmail(string email)
@@ -46,11 +50,11 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Create
                     return match.Groups[1].Value + domainName;
                 }
             }
-            catch (RegexMatchTimeoutException e)
+            catch (RegexMatchTimeoutException)
             {
                 return false;
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 return false;
             }
@@ -62,6 +66,28 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Create
                     RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
             }
             catch (RegexMatchTimeoutException)
+            {
+                return false;
+            }
+        }
+
+        private bool IsValidNumber(string telephoneNumber)
+        {
+            try
+            {
+                telephoneNumber = telephoneNumber.Trim();
+                PhoneNumberUtil phoneUtil = PhoneNumberUtil.GetInstance();
+                if (telephoneNumber.StartsWith("00"))
+                {
+                    // Replace 00 at beginning with +
+                    telephoneNumber = "+" + telephoneNumber.Remove(0, 2);
+                }
+                PhoneNumber phoneNumber = phoneUtil.Parse(telephoneNumber, "");    
+
+                bool result =phoneUtil.IsValidNumber(phoneNumber);
+                return result;
+            }
+            catch
             {
                 return false;
             }

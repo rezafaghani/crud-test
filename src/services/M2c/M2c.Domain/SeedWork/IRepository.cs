@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 
 namespace M2c.Domain.SeedWork
 {
@@ -7,11 +8,7 @@ namespace M2c.Domain.SeedWork
     {
         IUnitOfWork UnitOfWork { get; }
 
-        IQueryable<T> GetAll();
-        T Add(T entity);
-
-        void Update(T entity);
-        T Delete(T entity);
+       
 
     }
 

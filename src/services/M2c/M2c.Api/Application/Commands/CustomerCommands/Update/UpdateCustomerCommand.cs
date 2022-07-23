@@ -2,14 +2,14 @@
 using System.ComponentModel.DataAnnotations;
 using MediatR;
 
-namespace M2c.Api.Application.Commands.CustomerCommands.Create
+namespace M2c.Api.Application.Commands.CustomerCommands.Update
 {
-    public class CreateCustomerCommand : IRequest<bool>
+    public class UpdateCustomerCommand : IRequest<bool>
     {
         [Required]
-        public string FirstName { get; set; }
+        public string Firstname { get; set; }
         [Required]
-        public string LastName { get; set; }
+        public string Lastname { get; set; }
         [Required]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime DateOfBirth { get; set; }

@@ -1,19 +1,18 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using M2c.Domain.AggregatesModel;
 using M2c.Domain.Exceptions;
-using M2c.Domain.SeedWork;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace M2c.Api.Application.Commands.CustomerCommands.Create
 {
     public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommand, bool>
     {
-        private readonly IRepository<Customer> _repository;
+        private readonly ICustomerRepository _repository;
 
-        public CreateCustomerCommandHandler(IRepository<Customer> repository)
+        public CreateCustomerCommandHandler(ICustomerRepository repository)
         {
             _repository = repository;
         }
@@ -21,9 +20,9 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Create
         public async Task<bool> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
         {
             //check if the customer is duplicated
-            var customerIsDuplicate = await _repository.GetAll().AnyAsync(x =>
-                x.Firstname.Equals(request.Firstname) && x.Lastname.Equals(request.Lastname) &&
-                x.DateOfBirth.Date == request.DateOfBirth.Date, cancellationToken: cancellationToken);
+            var customerIsDuplicate =  _repository.GetAll().Any(x =>
+                x.Firstname.Equals(request.FirstName) && x.Lastname.Equals(request.LastName) &&
+                x.DateOfBirth.Date == request.DateOfBirth.Date);
             if (customerIsDuplicate)
             {
                 throw new DomainException("Customer information is duplicated");
@@ -33,8 +32,8 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Create
             {
                 Deleted = false,
                 Email = request.Email,
-                Firstname = request.Firstname,
-                Lastname = request.Lastname,
+                Firstname = request.FirstName,
+                Lastname = request.LastName,
                 PhoneNumber = request.PhoneNumber,
                 BankAccountNumber = request.BankAccountNumber,
                 DateOfBirth = request.DateOfBirth,
