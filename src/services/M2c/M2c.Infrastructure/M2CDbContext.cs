@@ -34,7 +34,7 @@ namespace M2c.Infrastructure
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
 
-            Debug.WriteLine("SchedulingDbContext::ctor ->" + GetHashCode());
+            Debug.WriteLine("M2CDbContext::ctor ->" + GetHashCode());
         }
 
         public bool HasActiveTransaction => _currentTransaction != null;
