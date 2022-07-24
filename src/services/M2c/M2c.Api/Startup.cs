@@ -58,7 +58,7 @@ namespace M2c.Api
 
             container.RegisterModule(new MediatorModule());
 
-            container.RegisterModule(new ApplicationModule(Configuration.GetConnectionString("ReminderConnection")));
+            container.RegisterModule(new ApplicationModule(Configuration.GetConnectionString("CustomerDb")));
 
             return new AutofacServiceProvider(container.Build());
         }

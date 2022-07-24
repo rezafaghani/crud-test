@@ -6,6 +6,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Serilog;
+using Serilog.Sinks.MSSqlServer;
 
 
 var configuration = GetConfiguration();
@@ -49,7 +50,21 @@ IWebHost BuildWebHost(IConfiguration config, string[] args)
 ILogger CreateSerilogLogger(IConfiguration config)
 {
     return new LoggerConfiguration()
-       
+        .MinimumLevel.Verbose()
+        .Enrich.WithProperty("ApplicationContext", M2c.Api.Program.AppName)
+        .Enrich.FromLogContext()
+        .WriteTo.MSSqlServer(
+            connectionString: config.GetConnectionString("CustomerDb"),
+            sinkOptions: new MSSqlServerSinkOptions
+            {
+                TableName = "LogEvents",
+                SchemaName = "dbo",
+                AutoCreateSqlTable = true
+            },
+            sinkOptionsSection: configuration.GetSection("Serilog:ColumnOptions"),
+            appConfiguration: configuration,
+            columnOptionsSection: configuration.GetSection("Serilog:SinkOptions"))
+        .WriteTo.Console()
         .ReadFrom.Configuration(config)
         
         .CreateLogger();

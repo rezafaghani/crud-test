@@ -5,16 +5,20 @@ using M2c.Domain.AggregatesModel;
 using M2c.Domain.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace M2c.Api.Application.Commands.CustomerCommands.Update
 {
     public class UpdateCustomerCommandHandler : IRequestHandler<UpdateCustomerCommand, bool>
     {
         private readonly ICustomerRepository _repository;
+        private readonly ILogger<UpdateCustomerCommandHandler> _logger;
 
-        public UpdateCustomerCommandHandler(ICustomerRepository repository)
+        public UpdateCustomerCommandHandler(ICustomerRepository repository,
+            ILogger<UpdateCustomerCommandHandler> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         public async Task<bool> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
@@ -28,7 +32,7 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Update
                 throw new DomainException("Customer information is not found");
             }
 
-            _repository.Update(new Customer
+            var customer = new Customer
             {
                 Deleted = false,
                 Email = request.Email,
@@ -38,7 +42,9 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Update
                 BankAccountNumber = request.BankAccountNumber,
                 DateOfBirth = request.DateOfBirth,
                 UpdateDateTime = DateTime.Now
-            });
+            };
+            _repository.Update(customer);
+            _logger.LogInformation("----- Updating Customer - Customer: {@Customer}", customer);
             return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
     }

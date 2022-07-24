@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Bogus;
 using M2c.Api.Application.Commands.CustomerCommands.Create;
 using M2c.Domain.AggregatesModel;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -21,11 +22,12 @@ namespace Mc2.Test
         {
             var customer = FakeCustomerCommand();
             _repository.Setup(repo => repo.GetAsync(It.IsAny<string>(),It.IsAny<string>()))
-                .Returns(Task.FromResult<Customer>(FakeCustomer()));
-            _repository.Setup(repo => repo.UnitOfWork.SaveChangesAsync(default(CancellationToken)))
+                .Returns(Task.FromResult(FakeCustomer()));
+            _repository.Setup(repo => repo.UnitOfWork.SaveChangesAsync(default))
                 .Returns(Task.FromResult(1));
-            var handler = new CreateCustomerCommandHandler( _repository.Object);
-            var cltToken = new System.Threading.CancellationToken();
+            var loggerMock = new Mock<ILogger<CreateCustomerCommandHandler>>();
+            var handler = new CreateCustomerCommandHandler( _repository.Object,loggerMock.Object);
+            var cltToken = new CancellationToken();
             var result = await handler.Handle(customer,cltToken);
 
             //Assert
@@ -45,7 +47,7 @@ namespace Mc2.Test
                 .RuleFor(u => u.DateOfBirth, f => f.Person.DateOfBirth)
                 .RuleFor(u=>u.UpdateDateTime,f=>f.Date.Recent())
                 .RuleFor(u=>u.DeleteDateTime,f=>f.Date.Recent())
-                .RuleFor(u=>u.Deleted,f=>false)
+                .RuleFor(u=>u.Deleted,_=>false)
                 .RuleFor(u=>u.CreateDateTime,f=>f.Date.Recent())
                 .RuleFor(u=>u.CreatedBy,f=>f.Random.Long());
             var customer = testCustomers.Generate();

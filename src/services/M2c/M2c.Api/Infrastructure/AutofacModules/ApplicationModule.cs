@@ -1,11 +1,12 @@
 ﻿using Autofac;
+using M2c.Api.Application.Queries;
 using M2c.Domain.AggregatesModel;
 using M2c.Infrastructure.Repositories;
 
 namespace M2c.Api.Infrastructure.AutofacModules
 {
     public class ApplicationModule
-        : Autofac.Module
+        : Module
     {
         public string QueriesConnectionString { get; }
 
@@ -15,7 +16,10 @@ namespace M2c.Api.Infrastructure.AutofacModules
         }
         protected override void Load(ContainerBuilder builder)
         {
-
+            builder.Register(_ => new CustomerQueries(QueriesConnectionString))
+                .As<ICustomerQueries>()
+                .InstancePerLifetimeScope();
+            
             builder.RegisterType<CustomerRepository>()
                 .As<ICustomerRepository>()
                 .InstancePerLifetimeScope();
