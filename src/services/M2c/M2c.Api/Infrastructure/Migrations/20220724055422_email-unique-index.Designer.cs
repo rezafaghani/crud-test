@@ -4,14 +4,16 @@ using M2c.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace M2c.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(M2CDbContext))]
-    partial class M2CDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220724055422_email-unique-index")]
+    partial class emailuniqueindex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,12 +24,10 @@ namespace M2c.Api.Infrastructure.Migrations
             modelBuilder.Entity("M2c.Domain.AggregatesModel.Customer", b =>
                 {
                     b.Property<string>("Firstname")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Lastname")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
@@ -48,8 +48,7 @@ namespace M2c.Api.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(15)

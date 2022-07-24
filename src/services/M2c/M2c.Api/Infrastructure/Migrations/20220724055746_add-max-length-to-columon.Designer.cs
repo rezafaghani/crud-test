@@ -4,14 +4,16 @@ using M2c.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace M2c.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(M2CDbContext))]
-    partial class M2CDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220724055746_add-max-length-to-columon")]
+    partial class addmaxlengthtocolumon
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

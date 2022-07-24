@@ -10,9 +10,10 @@ namespace M2c.Infrastructure.EntityConfigurations
         {
             builder.ToTable("Customers", M2CDbContext.DefaultSchema);
             builder.HasKey(b => new { b.Firstname, b.Lastname, b.DateOfBirth });
-            builder.Property(b => b.Firstname).IsRequired();
-            builder.Property(b => b.Lastname).IsRequired();
+            builder.Property(b => b.Firstname).IsRequired().HasMaxLength(100);
+            builder.Property(b => b.Lastname).IsRequired().HasMaxLength(100);
             builder.Property(b => b.PhoneNumber).HasMaxLength(15);
+            builder.Property(b => b.Email).HasMaxLength(50);
             builder.HasIndex(b => b.Email).IsUnique();
         }
     }
