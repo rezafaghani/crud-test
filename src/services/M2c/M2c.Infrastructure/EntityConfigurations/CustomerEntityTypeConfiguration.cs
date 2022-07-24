@@ -13,6 +13,7 @@ namespace M2c.Infrastructure.EntityConfigurations
             builder.Property(b => b.Firstname).IsRequired();
             builder.Property(b => b.Lastname).IsRequired();
             builder.Property(b => b.PhoneNumber).HasMaxLength(15);
+            builder.HasIndex(b => b.Email).IsUnique();
         }
     }
 }

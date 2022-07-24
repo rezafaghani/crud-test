@@ -39,8 +39,7 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Create
                 DateOfBirth = request.DateOfBirth,
                 CreateDateTime = DateTime.Now
             });
-            var result= await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
-            return result;
+            return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
     }
 }

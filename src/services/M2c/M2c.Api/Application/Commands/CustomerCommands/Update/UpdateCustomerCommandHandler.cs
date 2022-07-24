@@ -37,10 +37,9 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Update
                 PhoneNumber = request.PhoneNumber,
                 BankAccountNumber = request.BankAccountNumber,
                 DateOfBirth = request.DateOfBirth,
-                CreateDateTime = DateTime.Now
+                UpdateDateTime = DateTime.Now
             });
-            var result = await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
-            return result;
+            return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
     }
 }

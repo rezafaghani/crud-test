@@ -4,14 +4,14 @@ using System.Text.RegularExpressions;
 using FluentValidation;
 using PhoneNumbers;
 
-namespace M2c.Api.Application.Commands.CustomerCommands.Create
+namespace M2c.Api.Application.Commands.CustomerCommands.Update
 {
-    public class CreateCustomerCommandValidator : AbstractValidator<CreateCustomerCommand>
+    public class UpdateCustomerCommandValidator : AbstractValidator<UpdateCustomerCommand>
     {
-        public CreateCustomerCommandValidator()
+        public UpdateCustomerCommandValidator()
         {
-            RuleFor(r => r.FirstName).NotEmpty().WithMessage("First name is mandatory");
-            RuleFor(r => r.LastName).NotEmpty().WithMessage("Last name is mandatory");
+            RuleFor(r => r.Firstname).NotEmpty().WithMessage("First name is mandatory");
+            RuleFor(r => r.Lastname).NotEmpty().WithMessage("Last name is mandatory");
             RuleFor(r => r.DateOfBirth).NotEmpty().WithMessage("Date of birth is mandatory");
             RuleFor(r => r.Email).Must(BeValidEmail).WithMessage("Valid email is required ");
             RuleFor(r => r.PhoneNumber).NotEmpty().WithMessage("Phone number is mandatory")
