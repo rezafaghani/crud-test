@@ -32,7 +32,7 @@ namespace Mc2.Test
             _repository.Setup(repo => repo.UnitOfWork.SaveChangesAsync(default))
                 .Returns(Task.FromResult(1));
             var loggerMock = new Mock<ILogger<CreateCustomerCommandHandler>>();
-            var handler = new CreateCustomerCommandHandler(_repository.Object, loggerMock.Object, true);
+            var handler = new CreateCustomerCommandHandler(_repository.Object, loggerMock.Object);
             var cltToken = new CancellationToken();
             var result = await handler.Handle(customer, cltToken);
 

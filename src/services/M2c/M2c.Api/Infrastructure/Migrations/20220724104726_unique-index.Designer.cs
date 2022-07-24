@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace M2c.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(M2CDbContext))]
-    [Migration("20220723170811_initial-create")]
-    partial class initialcreate
+    [Migration("20220724104726_unique-index")]
+    partial class uniqueindex
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,14 +23,10 @@ namespace M2c.Api.Infrastructure.Migrations
 
             modelBuilder.Entity("M2c.Domain.AggregatesModel.Customer", b =>
                 {
-                    b.Property<string>("Firstname")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Lastname")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("BankAccountNumber")
                         .HasColumnType("nvarchar(max)");
@@ -41,6 +37,9 @@ namespace M2c.Api.Infrastructure.Migrations
                     b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("DeleteDateTime")
                         .HasColumnType("datetime2");
 
@@ -48,7 +47,18 @@ namespace M2c.Api.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Firstname")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Lastname")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(15)
@@ -57,7 +67,14 @@ namespace M2c.Api.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdateDateTime")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Firstname", "Lastname", "DateOfBirth");
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
+                    b.HasIndex("Firstname", "Lastname", "DateOfBirth")
+                        .IsUnique();
 
                     b.ToTable("Customers", "M2C");
                 });

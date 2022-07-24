@@ -13,14 +13,13 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Create
     {
         private readonly ICustomerRepository _repository;
         private readonly ILogger<CreateCustomerCommandHandler> _logger;
-        private readonly bool _isTestMod;
+
 
         public CreateCustomerCommandHandler(ICustomerRepository repository,
-            ILogger<CreateCustomerCommandHandler> logger, bool isTestMod)
+            ILogger<CreateCustomerCommandHandler> logger)
         {
             _repository = repository;
             _logger = logger;
-            _isTestMod = isTestMod;
         }
 
         public async Task<bool> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
@@ -35,6 +34,14 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Create
                 throw new DomainException("Customer information is duplicated");
             }
 
+            var customerEmailIsDuplicate = _repository.GetAll().Any(x =>
+                x.Email.Equals(request.Email));
+            if (customerEmailIsDuplicate)
+            {
+                _logger.LogError("----- Customer email is duplicated: {@Customer}", request);
+                throw new DomainException("Customer email is duplicated");
+            }
+
             var customer = new Customer
             {
                 Deleted = false,
@@ -43,15 +50,15 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Create
                 Lastname = request.LastName,
                 PhoneNumber = request.PhoneNumber,
                 BankAccountNumber = request.BankAccountNumber,
-                DateOfBirth = request.DateOfBirth,
+                DateOfBirth = request.DateOfBirth.Date,
                 CreateDateTime = DateTime.Now
             };
 
             _repository.Add(customer);
             _logger.LogInformation("----- Creating Customer - Customer: {@Customer}", customer);
-            if (_isTestMod)
-                return true;
-            return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+            await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+            return true;
         }
     }
 }
