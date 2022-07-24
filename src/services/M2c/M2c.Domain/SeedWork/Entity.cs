@@ -4,17 +4,15 @@ using MediatR;
 
 namespace M2c.Domain.SeedWork
 {
-
-   public abstract class Entity
+    public abstract class Entity
     {
         private List<INotification> _domainEvents;
-    
 
-      
+
         public bool Deleted { get; set; }
-        public DateTime CreateDateTime { get;  set; }
-        public DateTime? UpdateDateTime { get;  set; }
-        public DateTime? DeleteDateTime { get;  set; }
+        public DateTime CreateDateTime { get; set; }
+        public DateTime? UpdateDateTime { get; set; }
+        public DateTime? DeleteDateTime { get; set; }
         public long CreatedBy { get; protected set; }
 
         public void SetCreateDateTime()
@@ -26,7 +24,6 @@ namespace M2c.Domain.SeedWork
         {
             CreatedBy = createdBy;
         }
-
 
 
         public void SetUpdateDateTime()
@@ -66,11 +63,6 @@ namespace M2c.Domain.SeedWork
         {
             _domainEvents?.Clear();
         }
-
-
-
-
-
 
         public static bool operator ==(Entity left, Entity right)
         {
