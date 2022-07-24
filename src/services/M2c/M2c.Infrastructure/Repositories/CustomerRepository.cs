@@ -48,7 +48,7 @@ namespace M2c.Infrastructure.Repositories
                 .Entity;
         }
 
-        public async Task<Customer> GetAsync(string firstname, string lastname)
+        public async Task<Customer?> GetAsync(string firstname, string lastname)
         {
             var customer = await _context
                 .Set<Customer>()
