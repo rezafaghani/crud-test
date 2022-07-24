@@ -13,17 +13,20 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Create
     {
         private readonly ICustomerRepository _repository;
         private readonly ILogger<CreateCustomerCommandHandler> _logger;
+        private readonly bool _isTestMod;
 
-        public CreateCustomerCommandHandler(ICustomerRepository repository, ILogger<CreateCustomerCommandHandler> logger)
+        public CreateCustomerCommandHandler(ICustomerRepository repository,
+            ILogger<CreateCustomerCommandHandler> logger, bool isTestMod)
         {
             _repository = repository;
             _logger = logger;
+            _isTestMod = isTestMod;
         }
 
         public async Task<bool> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
         {
             //check if the customer is duplicated
-            var customerIsDuplicate =  _repository.GetAll().Any(x =>
+            var customerIsDuplicate = _repository.GetAll().Any(x =>
                 x.Firstname.Equals(request.FirstName) && x.Lastname.Equals(request.LastName) &&
                 x.DateOfBirth.Date == request.DateOfBirth.Date);
             if (customerIsDuplicate)
@@ -46,6 +49,8 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Create
 
             _repository.Add(customer);
             _logger.LogInformation("----- Creating Customer - Customer: {@Customer}", customer);
+            if (_isTestMod)
+                return true;
             return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
     }
