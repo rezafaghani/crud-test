@@ -16,7 +16,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace M2c.Infrastructure
 {
-    public class M2CDbContext: DbContext, IUnitOfWork
+    public class M2CDbContext : DbContext, IUnitOfWork
     {
         public const string DefaultSchema = "M2C";
 
@@ -52,7 +52,7 @@ namespace M2c.Infrastructure
 
             // After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
             // performed through the DbContext will be committed
-            var result = await base.SaveChangesAsync(cancellationToken);
+            int result = await base.SaveChangesAsync(cancellationToken);
 
             return result > 0;
         }
@@ -123,12 +123,12 @@ namespace M2c.Infrastructure
     {
         public M2CDbContext CreateDbContext(string[] args)
         {
-            var config = new ConfigurationBuilder()
+            IConfigurationRoot config = new ConfigurationBuilder()
                 .SetBasePath(Path.Combine(Directory.GetCurrentDirectory()))
                 .AddJsonFile("appsettings.json")
                 .AddEnvironmentVariables()
                 .Build();
-            var optionsBuilder = new DbContextOptionsBuilder<M2CDbContext>()
+            DbContextOptionsBuilder<M2CDbContext> optionsBuilder = new DbContextOptionsBuilder<M2CDbContext>()
                 .UseSqlServer(config.GetConnectionString("CustomerDb"));
 
             return new M2CDbContext(optionsBuilder.Options, new NoMediator());
@@ -159,15 +159,15 @@ namespace M2c.Infrastructure
             }
 
             public async IAsyncEnumerable<TResponse> CreateStream<TResponse>(IStreamRequest<TResponse> request,
-                [EnumeratorCancellation] CancellationToken cancellationToken = new CancellationToken())
+                [EnumeratorCancellation] CancellationToken cancellationToken = new())
             {
                 yield return await Task.FromResult(default(TResponse));
             }
 
             public async IAsyncEnumerable<object> CreateStream(object request,
-                [EnumeratorCancellation] CancellationToken cancellationToken = new CancellationToken())
+                [EnumeratorCancellation] CancellationToken cancellationToken = new())
             {
-                yield  return await Task.FromResult(default(object));
+                yield return await Task.FromResult(default(object));
             }
         }
     }

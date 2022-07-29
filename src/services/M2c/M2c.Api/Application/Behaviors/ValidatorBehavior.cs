@@ -1,17 +1,18 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
+using FluentValidation.Results;
 using M2c.Domain.Exceptions;
 using M2c.Infrastructure.Extensions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-
 namespace M2c.Api.Application.Behaviors
 {
-
-    public class ValidatorBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
+    public class ValidatorBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+        where TRequest : IRequest<TResponse>
     {
         private readonly ILogger<ValidatorBehavior<TRequest, TResponse>> _logger;
         private readonly IValidator<TRequest>[] _validators;
@@ -26,11 +27,11 @@ namespace M2c.Api.Application.Behaviors
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
             RequestHandlerDelegate<TResponse> next)
         {
-            var typeName = request.GetGenericTypeName();
+            string typeName = request.GetGenericTypeName();
 
             _logger.LogInformation("----- Validating command {CommandType}", typeName);
 
-            var failures = _validators
+            List<ValidationFailure> failures = _validators
                 .Select(v => v.Validate(request))
                 .SelectMany(result => result.Errors)
                 .Where(error => error != null)

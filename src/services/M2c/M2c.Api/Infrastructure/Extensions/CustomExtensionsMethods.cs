@@ -38,7 +38,7 @@ namespace M2c.Api.Infrastructure.Extensions
 
         public static IServiceCollection AddHealthChecks(this IServiceCollection services, IConfiguration configuration)
         {
-            var hcBuilder = services.AddHealthChecks();
+            IHealthChecksBuilder hcBuilder = services.AddHealthChecks();
 
             hcBuilder.AddCheck("self", () => HealthCheckResult.Healthy());
 
@@ -66,23 +66,20 @@ namespace M2c.Api.Infrastructure.Extensions
             );
 
 
-
             return services;
         }
-
-
 
 
         public static IServiceCollection AddCustomConfiguration(this IServiceCollection services,
             IConfiguration configuration)
         {
             services.AddOptions();
-           
+
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = context =>
                 {
-                    var problemDetails = new ValidationProblemDetails(context.ModelState)
+                    ValidationProblemDetails problemDetails = new(context.ModelState)
                     {
                         Instance = context.HttpContext.Request.Path,
                         Status = StatusCodes.Status400BadRequest,
@@ -91,7 +88,7 @@ namespace M2c.Api.Infrastructure.Extensions
 
                     return new BadRequestObjectResult(problemDetails)
                     {
-                        ContentTypes = {"application/problem+json", "application/problem+xml"}
+                        ContentTypes = { "application/problem+json", "application/problem+xml" }
                     };
                 };
             });
@@ -100,13 +97,12 @@ namespace M2c.Api.Infrastructure.Extensions
         }
 
 
-        
-        public static IServiceCollection AddCustomSwagger(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddCustomSwagger(this IServiceCollection services,
+            IConfiguration configuration)
         {
             services.AddSwaggerGen();
 
             return services;
         }
-        
     }
 }

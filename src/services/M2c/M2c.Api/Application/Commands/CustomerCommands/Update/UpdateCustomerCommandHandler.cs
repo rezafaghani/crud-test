@@ -11,8 +11,8 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Update
 {
     public class UpdateCustomerCommandHandler : IRequestHandler<UpdateCustomerCommand, bool>
     {
-        private readonly ICustomerRepository _repository;
         private readonly ILogger<UpdateCustomerCommandHandler> _logger;
+        private readonly ICustomerRepository _repository;
 
         public UpdateCustomerCommandHandler(ICustomerRepository repository,
             ILogger<UpdateCustomerCommandHandler> logger)
@@ -24,15 +24,12 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Update
         public async Task<bool> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
         {
             //check if the customer is duplicated
-            var customerIsDuplicate = await _repository.GetAll().FirstOrDefaultAsync(x =>
+            Customer customerIsDuplicate = await _repository.GetAll().FirstOrDefaultAsync(x =>
                 x.Firstname.Equals(request.Firstname) && x.Lastname.Equals(request.Lastname) &&
-                x.DateOfBirth.Date == request.DateOfBirth.Date, cancellationToken: cancellationToken);
-            if (customerIsDuplicate == null)
-            {
-                throw new DomainException("Customer information is not found");
-            }
+                x.DateOfBirth.Date == request.DateOfBirth.Date, cancellationToken);
+            if (customerIsDuplicate == null) throw new DomainException("Customer information is not found");
 
-            var customer = new Customer
+            Customer customer = new()
             {
                 Deleted = false,
                 Email = request.Email,

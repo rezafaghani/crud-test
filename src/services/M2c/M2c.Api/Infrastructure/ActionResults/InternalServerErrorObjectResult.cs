@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace M2c.Api.Infrastructure.ActionResults
 {
-
     public class InternalServerErrorObjectResult : ObjectResult
     {
         public InternalServerErrorObjectResult(object error)

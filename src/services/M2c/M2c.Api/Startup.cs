@@ -53,7 +53,7 @@ namespace M2c.Api
                 })
                 .AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>()
                 .AddCustomSwagger(Configuration);
-            var container = new ContainerBuilder();
+            ContainerBuilder container = new();
             container.Populate(services);
 
             container.RegisterModule(new MediatorModule());
@@ -67,7 +67,7 @@ namespace M2c.Api
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory,
             IApiVersionDescriptionProvider provider)
         {
-            var pathBase = Configuration["PATH_BASE"];
+            string pathBase = Configuration["PATH_BASE"];
             if (!string.IsNullOrEmpty(pathBase))
             {
                 loggerFactory.CreateLogger<Startup>().LogDebug("Using PATH BASE '{PathBase}'", pathBase);
@@ -80,12 +80,9 @@ namespace M2c.Api
                     c =>
                     {
                         // build a swagger endpoint for each discovered API version  
-                        foreach (var description in provider.ApiVersionDescriptions)
-                        {
+                        foreach (ApiVersionDescription description in provider.ApiVersionDescriptions)
                             c.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
                                 description.GroupName.ToUpperInvariant());
-                        }
-
                     });
             app.UseRouting();
             app.UseCors("CorsPolicy");

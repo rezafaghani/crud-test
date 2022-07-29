@@ -20,19 +20,16 @@ namespace M2c.Api.Infrastructure.AutofacModules
                 .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
 
-
-
             // Register the Command's Validators (Validators based on FluentValidation library)
             builder
-                 .RegisterAssemblyTypes(typeof(CreateCustomerCommandValidator).GetTypeInfo().Assembly)
-                 .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
-                 .AsImplementedInterfaces();
-
+                .RegisterAssemblyTypes(typeof(CreateCustomerCommandValidator).GetTypeInfo().Assembly)
+                .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
+                .AsImplementedInterfaces();
 
 
             builder.Register<ServiceFactory>(context =>
             {
-                var componentContext = context.Resolve<IComponentContext>();
+                IComponentContext componentContext = context.Resolve<IComponentContext>();
                 return t =>
                 {
                     object o;

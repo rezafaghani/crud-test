@@ -6,15 +6,17 @@ namespace M2c.Domain.SeedWork
 {
     public abstract class Entity
     {
-  private List<INotification> _domainEvents;
+        private List<INotification> _domainEvents;
         private int? _requestedHashCode;
 
         public virtual long Id { get; protected set; }
         public bool Deleted { get; set; }
-        public DateTime CreateDateTime { get;  set; }
-        public DateTime? UpdateDateTime { get;  set; }
-        public DateTime? DeleteDateTime { get;  set; }
+        public DateTime CreateDateTime { get; set; }
+        public DateTime? UpdateDateTime { get; set; }
+        public DateTime? DeleteDateTime { get; set; }
         public long CreatedBy { get; protected set; }
+
+        public IReadOnlyCollection<INotification> DomainEvents => _domainEvents?.AsReadOnly();
 
         public void SetCreateDateTime()
         {
@@ -51,8 +53,6 @@ namespace M2c.Domain.SeedWork
             Deleted = false;
         }
 
-        public IReadOnlyCollection<INotification> DomainEvents => _domainEvents?.AsReadOnly();
-
         public void AddDomainEvent(INotification eventItem)
         {
             _domainEvents = _domainEvents ?? new List<INotification>();
@@ -85,7 +85,7 @@ namespace M2c.Domain.SeedWork
             if (GetType() != obj.GetType())
                 return false;
 
-            var item = (Entity) obj;
+            Entity item = (Entity)obj;
 
             if (item.IsTransient() || IsTransient())
                 return false;

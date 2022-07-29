@@ -16,9 +16,9 @@ namespace M2c.Api.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     public class CustomerController : ControllerBase
     {
+        private readonly ICustomerQueries _customerQueries;
         private readonly ILogger<CustomerController> _logger;
         private readonly IMediator _mediator;
-        private readonly ICustomerQueries _customerQueries;
 
         public CustomerController(ILogger<CustomerController> logger, IMediator mediator,
             ICustomerQueries customerQueries)
@@ -70,7 +70,7 @@ namespace M2c.Api.Controllers
         {
             try
             {
-                var customers = await _customerQueries.GetCustomersAsync(firstName, lastname);
+                IEnumerable<CustomerSummary> customers = await _customerQueries.GetCustomersAsync(firstName, lastname);
 
                 return Ok(customers);
             }
