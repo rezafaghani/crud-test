@@ -23,10 +23,11 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Update
 
         public async Task<bool> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
         {
+            var dateOfBirth = DateTime.Parse(request.DateOfBirth).Date;
             //check if the customer is duplicated
             Customer customerIsDuplicate = await _repository.GetAll().FirstOrDefaultAsync(x =>
                 x.Firstname.Equals(request.Firstname) && x.Lastname.Equals(request.Lastname) &&
-                x.DateOfBirth.Date == request.DateOfBirth.Date, cancellationToken);
+                x.DateOfBirth.Date == dateOfBirth, cancellationToken);
             if (customerIsDuplicate == null) throw new DomainException("Customer information is not found");
 
             Customer customer = new()
@@ -37,7 +38,7 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Update
                 Lastname = request.Lastname,
                 PhoneNumber = request.PhoneNumber,
                 BankAccountNumber = request.BankAccountNumber,
-                DateOfBirth = request.DateOfBirth,
+                DateOfBirth = dateOfBirth,
                 UpdateDateTime = DateTime.Now
             };
             _repository.Update(customer);

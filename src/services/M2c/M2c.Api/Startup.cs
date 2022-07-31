@@ -53,6 +53,7 @@ namespace M2c.Api
                 })
                 .AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>()
                 .AddCustomSwagger(Configuration);
+
             ContainerBuilder container = new();
             container.Populate(services);
 

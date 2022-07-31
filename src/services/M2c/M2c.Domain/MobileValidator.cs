@@ -17,8 +17,13 @@ namespace M2c.Domain
                 //check if its a valid  phone number
                 bool isValidNumber = phoneUtil.IsValidNumber(phoneNumber);
                 if (isValidNumber)
+
+                {
                     //check if its a valid mobile number
-                    return phoneUtil.IsPossibleNumberForType(phoneNumber, PhoneNumberType.MOBILE);
+                    PhoneNumberType phoneNumberType = phoneUtil.GetNumberType(phoneNumber);
+                    return phoneNumberType == PhoneNumberType.MOBILE;
+                }
+
                 return false;
             }
             catch

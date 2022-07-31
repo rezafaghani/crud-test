@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Bogus;
@@ -76,7 +77,7 @@ namespace Mc2.Test
                         ? f.Phone.PhoneNumberFormat(1)
                         : f.Random.String())
                 .RuleFor(u => u.Email, (f, _) => f.Internet.Email())
-                .RuleFor(u => u.DateOfBirth, f => f.Person.DateOfBirth);
+                .RuleFor(u => u.DateOfBirth, f => f.Person.DateOfBirth.ToString(CultureInfo.InvariantCulture));
             CreateCustomerCommand customer = testCustomers.Generate();
             return customer;
         }

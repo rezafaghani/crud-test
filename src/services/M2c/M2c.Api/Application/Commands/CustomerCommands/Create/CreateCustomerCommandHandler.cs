@@ -24,11 +24,12 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Create
 
         public async Task<bool> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
         {
+            var dateOfBirth = DateTime.Parse(request.DateOfBirth).Date;
             //check if the customer is duplicated
             bool customerIsDuplicate = _repository.GetAll().Any(x =>
                 x.Firstname.Equals(request.FirstName.Trim().ToLower()) &&
                 x.Lastname.Equals(request.LastName.Trim().ToLower()) &&
-                x.DateOfBirth.Date == request.DateOfBirth.Date);
+                x.DateOfBirth.Date == dateOfBirth);
             if (customerIsDuplicate)
             {
                 _logger.LogError("----- Customer information is duplicated: {@Customer}", request);
@@ -51,7 +52,7 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Create
                 Lastname = request.LastName.Trim().ToLower(),
                 PhoneNumber = request.PhoneNumber.Trim(),
                 BankAccountNumber = request.BankAccountNumber.Trim(),
-                DateOfBirth = request.DateOfBirth.Date,
+                DateOfBirth = dateOfBirth,
                 CreateDateTime = DateTime.Now
             };
 
