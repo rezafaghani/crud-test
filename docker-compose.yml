@@ -3,13 +3,6 @@ version: '3.8'
 services:
   db:
     image: mcr.microsoft.com/azure-sql-edge
-    
-    volumes:
-      - sqlsystem:/var/opt/mssql/
-      - sqldata:/var/opt/sqlserver/data
-      - sqllog:/var/opt/sqlserver/log
-      - sqlbackup:/var/opt/sqlserver/backup
-
     ports:
       - "1433:1433"
     restart: always
@@ -21,7 +14,7 @@ services:
   webapp:
     build:
       context:  .
-      dockerfile:  src\services\M2c\M2c.Api\Dockerfile
+      dockerfile:  src/services/M2c/M2c.Api/Dockerfile
     depends_on:
       - db
     ports:
@@ -31,8 +24,4 @@ services:
        - ConnectionStrings__CustomerDb=Server=db;Database=CustomerDb;User Id=sa;Password=SqlPassword!;
        - ASPNETCORE_ENVIRONMENT=Development
 
-volumes:
-  sqlsystem:
-  sqldata:
-  sqllog:
-  sqlbackup:
+

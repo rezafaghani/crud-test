@@ -50,16 +50,14 @@ namespace M2c.Infrastructure.Repositories
 
         public async Task<Customer?> GetAsync(string firstname, string lastname)
         {
-            var customer = await _context
+            Customer? customer = await _context
                 .Set<Customer>()
                 .FirstOrDefaultAsync(o => o.Firstname == firstname && o.Lastname == lastname);
             if (customer == null)
-            {
                 customer = _context
                     .Set<Customer>()
                     .Local
                     .FirstOrDefault(o => o.Firstname == firstname && o.Lastname == lastname);
-            }
 
 
             return customer;

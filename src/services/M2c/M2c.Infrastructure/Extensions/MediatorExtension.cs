@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using M2c.Domain.SeedWork;
 using MediatR;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace M2c.Infrastructure.Extensions
 {
@@ -9,20 +11,20 @@ namespace M2c.Infrastructure.Extensions
     {
         public static async Task DispatchDomainEventsAsync(this IMediator mediator, M2CDbContext ctx)
         {
-            var domainEntities = ctx.ChangeTracker
+            IEnumerable<EntityEntry<Entity>> domainEntities = ctx.ChangeTracker
                 .Entries<Entity>()
                 .Where(x => x.Entity.DomainEvents != null && x.Entity.DomainEvents.Any());
 
             {
-                var entityEntries = domainEntities.ToList();
-                var domainEvents = entityEntries
+                List<EntityEntry<Entity>> entityEntries = domainEntities.ToList();
+                List<INotification> domainEvents = entityEntries
                     .SelectMany(x => x.Entity.DomainEvents)
                     .ToList();
 
                 entityEntries.ToList()
                     .ForEach(entity => entity.Entity.ClearDomainEvents());
 
-                foreach (var domainEvent in domainEvents)
+                foreach (INotification domainEvent in domainEvents)
                     await mediator.Publish(domainEvent);
             }
         }

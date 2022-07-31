@@ -6,7 +6,8 @@ using Microsoft.Extensions.Logging;
 
 namespace M2c.Api.Application.Behaviors
 {
-    public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
+    public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+        where TRequest : IRequest<TResponse>
     {
         private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger;
 
@@ -20,7 +21,7 @@ namespace M2c.Api.Application.Behaviors
         {
             _logger.LogInformation("----- Handling command {CommandName} ({@Command})", request.GetGenericTypeName(),
                 request);
-            var response = await next();
+            TResponse response = await next();
             _logger.LogInformation("----- Command {CommandName} handled - response: {@Response}",
                 request.GetGenericTypeName(), response);
 
@@ -28,4 +29,3 @@ namespace M2c.Api.Application.Behaviors
         }
     }
 }
-

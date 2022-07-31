@@ -25,7 +25,7 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Update
 
         private bool BeValidBankAccount(string account)
         {
-            return (Regex.IsMatch(account, @"^\d+$"));
+            return Regex.IsMatch(account, @"^\d+$");
         }
 
         private bool BeValidEmail(string email)
@@ -43,7 +43,7 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Update
                 string DomainMapper(Match match)
                 {
                     // Use IdnMapping class to convert Unicode domain names.
-                    var idn = new IdnMapping();
+                    IdnMapping idn = new();
 
                     // Pull out and process domain name (throws ArgumentException on invalid)
                     string domainName = idn.GetAscii(match.Groups[2].Value);
@@ -79,13 +79,11 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Update
                 telephoneNumber = telephoneNumber.Trim();
                 PhoneNumberUtil phoneUtil = PhoneNumberUtil.GetInstance();
                 if (telephoneNumber.StartsWith("00"))
-                {
                     // Replace 00 at beginning with +
                     telephoneNumber = "+" + telephoneNumber.Remove(0, 2);
-                }
-                PhoneNumber phoneNumber = phoneUtil.Parse(telephoneNumber, "");    
+                PhoneNumber phoneNumber = phoneUtil.Parse(telephoneNumber, "");
 
-                bool result =phoneUtil.IsValidNumber(phoneNumber);
+                bool result = phoneUtil.IsValidNumber(phoneNumber);
                 return result;
             }
             catch

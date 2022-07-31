@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 
 namespace M2c.Api.Infrastructure.Filters
 {
-
     public class HttpGlobalExceptionFilter : IExceptionFilter
     {
         private readonly IWebHostEnvironment env;
@@ -30,31 +29,28 @@ namespace M2c.Api.Infrastructure.Filters
 
             if (context.Exception.GetType() == typeof(DomainException))
             {
-                var problemDetails = new ValidationProblemDetails()
+                ValidationProblemDetails problemDetails = new()
                 {
                     Instance = context.HttpContext.Request.Path,
                     Status = StatusCodes.Status400BadRequest,
                     Detail = "Please refer to the errors property for additional details."
                 };
 
-                problemDetails.Errors.Add("DomainValidations", new string[] { context.Exception.Message.ToString() });
+                problemDetails.Errors.Add("DomainValidations", new[] { context.Exception.Message });
 
                 context.Result = new BadRequestObjectResult(problemDetails);
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             }
             else
             {
-                var json = new JsonErrorResponse
+                JsonErrorResponse json = new()
                 {
                     Messages = new[] { "An error occur.Try it again." }
                 };
 
-                if (env.IsDevelopment())
-                {
-                    json.DeveloperMessage = context.Exception;
-                }
+                if (env.IsDevelopment()) json.DeveloperMessage = context.Exception;
 
-               
+
                 context.Result = new InternalServerErrorObjectResult(json);
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             }

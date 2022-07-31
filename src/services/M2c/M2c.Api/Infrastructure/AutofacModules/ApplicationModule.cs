@@ -8,22 +8,22 @@ namespace M2c.Api.Infrastructure.AutofacModules
     public class ApplicationModule
         : Module
     {
-        public string QueriesConnectionString { get; }
-
         public ApplicationModule(string qconstr)
         {
             QueriesConnectionString = qconstr;
         }
+
+        public string QueriesConnectionString { get; }
+
         protected override void Load(ContainerBuilder builder)
         {
             builder.Register(_ => new CustomerQueries(QueriesConnectionString))
                 .As<ICustomerQueries>()
                 .InstancePerLifetimeScope();
-            
+
             builder.RegisterType<CustomerRepository>()
                 .As<ICustomerRepository>()
                 .InstancePerLifetimeScope();
-
         }
     }
 }
