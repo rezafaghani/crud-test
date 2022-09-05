@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 using FluentValidation;
+using M2c.Domain;
 using PhoneNumbers;
 
 namespace M2c.Api.Application.Commands.CustomerCommands.Update
@@ -15,7 +16,7 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Update
             RuleFor(r => r.DateOfBirth).NotEmpty().WithMessage("Date of birth is mandatory");
             RuleFor(r => r.Email).Must(BeValidEmail).WithMessage("Valid email is required ");
             RuleFor(r => r.PhoneNumber).NotEmpty().WithMessage("Phone number is mandatory")
-                .Must(IsValidNumber).WithMessage("Phone number is not valid")
+                .Must(MobileValidator.IsValidNumber).WithMessage("Phone number is not valid")
                 .MaximumLength(15).WithMessage("Phone number can not more than 15 character");
 
             RuleFor(x => x.BankAccountNumber).Must(BeValidBankAccount)
@@ -24,7 +25,7 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Update
 
         private bool BeValidBankAccount(string account)
         {
-            return (Regex.IsMatch(account, @"^\d+$"));
+            return Regex.IsMatch(account, @"^\d+$");
         }
 
         private bool BeValidEmail(string email)
@@ -42,7 +43,7 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Update
                 string DomainMapper(Match match)
                 {
                     // Use IdnMapping class to convert Unicode domain names.
-                    var idn = new IdnMapping();
+                    IdnMapping idn = new();
 
                     // Pull out and process domain name (throws ArgumentException on invalid)
                     string domainName = idn.GetAscii(match.Groups[2].Value);
@@ -78,13 +79,11 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Update
                 telephoneNumber = telephoneNumber.Trim();
                 PhoneNumberUtil phoneUtil = PhoneNumberUtil.GetInstance();
                 if (telephoneNumber.StartsWith("00"))
-                {
                     // Replace 00 at beginning with +
                     telephoneNumber = "+" + telephoneNumber.Remove(0, 2);
-                }
-                PhoneNumber phoneNumber = phoneUtil.Parse(telephoneNumber, "");    
+                PhoneNumber phoneNumber = phoneUtil.Parse(telephoneNumber, "");
 
-                bool result =phoneUtil.IsValidNumber(phoneNumber);
+                bool result = phoneUtil.IsValidNumber(phoneNumber);
                 return result;
             }
             catch

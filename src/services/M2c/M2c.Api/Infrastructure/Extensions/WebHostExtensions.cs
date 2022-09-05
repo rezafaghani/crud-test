@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Polly;
+using Polly.Retry;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.AspNetCore.Hosting
@@ -15,19 +16,19 @@ namespace Microsoft.AspNetCore.Hosting
         public static IWebHost MigrateDbContext<TContext>(this IWebHost webHost,
             Action<TContext, IServiceProvider> seeder) where TContext : DbContext
         {
-            using (var scope = webHost.Services.CreateScope())
+            using (IServiceScope scope = webHost.Services.CreateScope())
             {
-                var services = scope.ServiceProvider;
-                var logger = services.GetRequiredService<ILogger<TContext>>();
-                var context = services.GetService<TContext>();
+                IServiceProvider services = scope.ServiceProvider;
+                ILogger<TContext> logger = services.GetRequiredService<ILogger<TContext>>();
+                TContext context = services.GetService<TContext>();
 
                 try
                 {
                     logger.LogInformation("Migrating database associated with context {DbContextName}",
                         typeof(TContext).Name);
 
-                    var retryInSeconds = 5;
-                    var retry = Policy.Handle<SqlException>()
+                    int retryInSeconds = 5;
+                    RetryPolicy retry = Policy.Handle<SqlException>()
                         .WaitAndRetryForever(
                             (_, _) => TimeSpan.FromSeconds(retryInSeconds),
                             (exception, retryAttempt, _, _) =>

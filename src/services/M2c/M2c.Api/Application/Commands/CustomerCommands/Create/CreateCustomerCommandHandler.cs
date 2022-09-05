@@ -11,8 +11,8 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Create
 {
     public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommand, bool>
     {
-        private readonly ICustomerRepository _repository;
         private readonly ILogger<CreateCustomerCommandHandler> _logger;
+        private readonly ICustomerRepository _repository;
 
 
         public CreateCustomerCommandHandler(ICustomerRepository repository,
@@ -24,33 +24,35 @@ namespace M2c.Api.Application.Commands.CustomerCommands.Create
 
         public async Task<bool> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
         {
+            var dateOfBirth = DateTime.Parse(request.DateOfBirth).Date;
             //check if the customer is duplicated
-            var customerIsDuplicate = _repository.GetAll().Any(x =>
-                x.Firstname.Equals(request.FirstName) && x.Lastname.Equals(request.LastName) &&
-                x.DateOfBirth.Date == request.DateOfBirth.Date);
+            bool customerIsDuplicate = _repository.GetAll().Any(x =>
+                x.Firstname.Equals(request.FirstName.Trim().ToLower()) &&
+                x.Lastname.Equals(request.LastName.Trim().ToLower()) &&
+                x.DateOfBirth.Date == dateOfBirth);
             if (customerIsDuplicate)
             {
                 _logger.LogError("----- Customer information is duplicated: {@Customer}", request);
                 throw new DomainException("Customer information is duplicated");
             }
 
-            var customerEmailIsDuplicate = _repository.GetAll().Any(x =>
-                x.Email.Equals(request.Email));
+            bool customerEmailIsDuplicate = _repository.GetAll().Any(x =>
+                x.Email.Equals(request.Email.Trim().ToLower()));
             if (customerEmailIsDuplicate)
             {
                 _logger.LogError("----- Customer email is duplicated: {@Customer}", request);
                 throw new DomainException("Customer email is duplicated");
             }
 
-            var customer = new Customer
+            Customer customer = new()
             {
                 Deleted = false,
-                Email = request.Email,
-                Firstname = request.FirstName,
-                Lastname = request.LastName,
-                PhoneNumber = request.PhoneNumber,
-                BankAccountNumber = request.BankAccountNumber,
-                DateOfBirth = request.DateOfBirth.Date,
+                Email = request.Email.Trim().ToLower(),
+                Firstname = request.FirstName.Trim().ToLower(),
+                Lastname = request.LastName.Trim().ToLower(),
+                PhoneNumber = request.PhoneNumber.Trim(),
+                BankAccountNumber = request.BankAccountNumber.Trim(),
+                DateOfBirth = dateOfBirth,
                 CreateDateTime = DateTime.Now
             };
 
